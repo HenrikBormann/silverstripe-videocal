@@ -2,8 +2,8 @@
 
 namespace Zazama\Videocal;
 
-use SilverStripe\View\ArrayData;
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\Model\ArrayData;
+use SilverStripe\Model\List\ArrayList;
 
 class LocalVideoShortcodeParser {
     public static function LocalVideoParser($arguments, $content, $parser, $tagName) {
@@ -20,12 +20,10 @@ class LocalVideoShortcodeParser {
         return ArrayData::create([
             'Video' => $localVideo->Video(),
             'Thumbnail' => $localVideo->Thumbnail(),
-            'Arguments' => new ArrayList(array_map(static function ($key, $value) {
-                return new ArrayData([
-                    'Key' => $key,
-                    'Value' => $value
-                ]);
-            }, array_keys($arguments), $arguments))
+            'Arguments' => new ArrayList(array_map(static fn($key, $value) => new ArrayData([
+                'Key' => $key,
+                'Value' => $value
+            ]), array_keys($arguments), $arguments))
         ])->renderWith('LocalVideoEmbed');
     }
 }
